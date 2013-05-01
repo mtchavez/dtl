@@ -1,4 +1,4 @@
 go-dtl
 ======
 
-Decision Learning Tree in Go
+Decision Tree Learning in Go
