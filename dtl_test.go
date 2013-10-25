@@ -74,4 +74,13 @@ var _ = Describe("Dtl", func() {
         })
     })
 
+    Describe("LoadExamples", func(){
+    
+        It("loads in examples from csv", func(){
+            examples, labels := LoadExamples("./examples.csv")
+            Expect(labels).To(HaveLen(4))
+            Expect(examples).To(HaveLen(4))
+        })
+    })
+
 })

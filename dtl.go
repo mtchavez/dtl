@@ -1,7 +1,11 @@
 package dtl
 
 import (
-  "math"
+    "bufio"
+    "math"
+    "os"
+    "strconv"
+    "strings"
 )
 
 type Tree struct {
@@ -66,4 +70,33 @@ func entropy(totalExamples float64, node Node) float64{
         sum += val
     }
     return float64(1.0 - sum)
+}
+
+func LoadExamples(filepath string) ([][]float64, []string) {
+    file, _ := os.Open(filepath)
+    scanner := bufio.NewScanner(file)
+    var labels []string
+    examples := [][]float64{}
+    for scanner.Scan() {
+        if len(labels) == 0 {
+            labels = strings.Split(strings.Replace(scanner.Text(), "\"", "", -1), ",")
+            labels = labels[:len(labels)-1]
+            continue
+        }
+        ex := strings.Split(scanner.Text(), ",")
+        converted := []float64{}
+        for _, val := range ex {
+            f, err := strconv.ParseFloat(val, 64)
+            if err != nil {
+                panic(err)
+            }
+            converted = append(converted, f)
+        }
+        examples = append(examples, converted)
+    }
+
+    if err := scanner.Err(); err != nil {
+        panic(err)
+    }
+    return examples, labels
 }
