@@ -8,6 +8,11 @@ import (
     "strings"
 )
 
+type DT struct {
+    Labels []string
+    Examples [][]float64
+}
+
 type Tree struct {
     root Node
 }
@@ -15,12 +20,9 @@ type Tree struct {
 type Node struct {
     name string
     children []Node
-    examples [][]string
+    examples [][]float64
 }
 
-func DTL(examples [][]string) {
-
-}
 
 func information(x float64, y float64) float64 {
     if x <= 0.0 {
@@ -32,7 +34,7 @@ func information(x float64, y float64) float64 {
     return math.Abs(-x * math.Log2(x) - y * math.Log2(y))
 }
 
-func gain(total float64, examples [][]string) float64 {
+func gain(total float64, examples [][]float64) float64 {
     var good, bad float64 = 0.0, 0.0
     if total <= 0.0 {
         return 0.0
@@ -46,7 +48,7 @@ func gain(total float64, examples [][]string) float64 {
     }
     for _, ex := range examples {
         last := ex[length - 1]
-        if last == "true" {
+        if last == 1.0 {
             good++
         } else {
             bad++

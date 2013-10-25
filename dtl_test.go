@@ -29,19 +29,19 @@ var _ = Describe("Dtl", func() {
 
 
         It("returns 0 if total <= 0", func(){
-            examples := [][]string{}
+            examples := [][]float64{}
             Expect(gain(-1.0, examples)).To(Equal(0.0))
             Expect(gain(0.0, examples)).To(Equal(0.0))
         })
 
         It("returns 0 if no examples", func(){
-            examples := [][]string{}
+            examples := [][]float64{}
             Expect(gain(100.0, examples)).To(Equal(0.0))
         })
 
         It("caclulated correctly", func(){
             total := float64(3.0)
-            examples := [][]string{ []string{"1", "true"}, []string{"2", "true"}, []string{"3", "false"} }
+            examples := [][]float64{ []float64{1.0, 1.0}, []float64{2.0, 1.0}, []float64{3.0, 0.0} }
             expected := float64(0.9182958340544896)
             Expect(gain(total, examples)).To(Equal(expected))
         })
@@ -50,13 +50,13 @@ var _ = Describe("Dtl", func() {
     Describe("entropy", func(){
 
         var (
-            examples [][]string
+            examples [][]float64
             children []Node
             node Node
         )
 
         BeforeEach(func(){
-            examples = [][]string{ []string{"1", "true"}, []string{"2", "true"}, []string{"3", "false"} }
+            examples = [][]float64{ []float64{1.0, 1.0}, []float64{2.0, 1.0}, []float64{3.0, 0.0} }
             children = []Node { Node{ name: "test2", examples: examples } }
             node = Node{ name: "test", examples: examples, children: children}
  
