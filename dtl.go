@@ -11,6 +11,7 @@ import (
 type DT struct {
     Labels []string
     Examples [][]float64
+    Default bool
 }
 
 type Tree struct {
@@ -101,4 +102,28 @@ func LoadExamples(filepath string) ([][]float64, []string) {
         panic(err)
     }
     return examples, labels
+}
+
+func (dt *DT) Majority() (result bool) {
+    total := len(dt.Examples)
+    if total == 0 {
+        return dt.Default
+    }
+    good := 0
+    bad := 0
+    for _, ex := range dt.Examples {
+        if ex[len(ex) - 1] == 1.0 {
+            good++
+        } else {
+            bad++
+        }
+    }
+    if good > (total / 2) {
+        result = true 
+    } else if bad > (total / 2) {
+        result = false
+    } else {
+       result = dt.Default 
+    }
+    return
 }

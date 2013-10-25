@@ -83,4 +83,31 @@ var _ = Describe("Dtl", func() {
         })
     })
 
+    Describe("Majority", func(){
+   
+        var (
+            dt *DT
+            examples [][]float64
+        )
+
+        BeforeEach(func(){
+            dt = &DT{Default: true}
+            examples = [][]float64{[]float64{0.0, 1.0}, []float64{0.0, 0.0}, []float64{0.0, 0.0}}
+        })
+
+        It("returns defualt if no examples", func(){
+            Expect(dt.Majority()).To(Equal(dt.Default))
+        })
+
+        It("returns clear majority", func(){
+            dt.Examples = examples
+            Expect(dt.Majority()).To(BeFalse())
+        })
+
+        It("returns default if results are even", func(){
+            dt.Examples = append(examples, []float64{1.0, 1.0})
+            Expect(dt.Majority()).To(Equal(dt.Default))
+        })
+    })
+
 })
