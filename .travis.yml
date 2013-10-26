@@ -1,3 +1,4 @@
 go:
   - 1.1
   - tip
+script: cd dtl && go test
