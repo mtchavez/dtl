@@ -25,18 +25,9 @@ type Node struct {
 	examples [][]float64
 }
 
-func information(x float64, y float64) float64 {
-	if x <= 0.0 {
-		x = 0.0000001
-	}
-	if y <= 0.0 {
-		y = 0.0000001
-	}
-	return math.Abs(-x*math.Log2(x) - y*math.Log2(y))
-}
-
-func gain(total float64, examples [][]float64) float64 {
-	var good, bad float64 = 0.0, 0.0
+func entropy(examples [][]float64) (ent float64) {
+    labelCounts := make(map[float64]float64)
+    total := float64(len(examples))
 	if total <= 0.0 {
 		return 0.0
 	}
@@ -48,32 +39,24 @@ func gain(total float64, examples [][]float64) float64 {
 		return 0.0
 	}
 	for _, ex := range examples {
-		last := ex[length-1]
-		if last == 1.0 {
-			good++
-		} else {
-			bad++
-		}
+		label := ex[length-1]
+        count, exists := labelCounts[label]
+        if !exists {
+            labelCounts[label] = 0
+        }
+        labelCounts[label] = count + 1
 	}
-	count := good + bad
-	factor := count / total
-	x := good / count
-	y := bad / count
 
-	return factor * information(x, y)
+    for _, count := range labelCounts {
+	    prob := count / total
+        if prob <= 0.0 {
+		    prob = 0.0000001
+	    }
+        ent -= prob * math.Log2(prob)
+    }
+
+	return 
 }
-
-//func entropy(examples[][]float64) float64 {
-//	var gains []float64
-//	for _, child := range node.children {
-//		gains = append(gains, gain(totalExamples, child.examples))
-//	}
-//	sum := float64(0.0)
-//	for _, val := range gains {
-//		sum += val
-//	}
-//	return float64(1.0 - sum)
-//}
 
 func LoadExamples(filepath string) ([][]float64, []string) {
 	file, _ := os.Open(filepath)

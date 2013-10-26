@@ -24,27 +24,6 @@ var _ = Describe("Dtl", func() {
 		})
 	})
 
-	Describe("gain", func() {
-
-		It("returns 0 if total <= 0", func() {
-			examples := [][]float64{}
-			Expect(gain(-1.0, examples)).To(Equal(0.0))
-			Expect(gain(0.0, examples)).To(Equal(0.0))
-		})
-
-		It("returns 0 if no examples", func() {
-			examples := [][]float64{}
-			Expect(gain(100.0, examples)).To(Equal(0.0))
-		})
-
-		It("caclulated correctly", func() {
-			total := float64(3.0)
-			examples := [][]float64{{1.0, 1.0}, {2.0, 1.0}, {3.0, 0.0}}
-			expected := float64(0.9182958340544896)
-			Expect(gain(total, examples)).To(Equal(expected))
-		})
-	})
-
     Describe("split", func(){
     
         It("returns no examples if none left", func(){
@@ -64,31 +43,30 @@ var _ = Describe("Dtl", func() {
         })
     })
 
-//	Describe("entropy", func() {
-//
-//		var (
-//			examples [][]float64
-//			children []Node
-//			node     Node
-//		)
-//
-//		BeforeEach(func() {
-//			examples = [][]float64{{1.0, 1.0}, {2.0, 1.0}, {3.0, 0.0}}
-//			children = []Node{{name: "test2", examples: examples}}
-//			node = Node{name: "test", examples: examples, children: children}
-//
-//		})
-//
-//		It("calculates if remaining examples", func() {
-//			expected := float64(0.08170416594551044)
-//			Expect(entropy(float64(3.0), node)).To(Equal(expected))
-//		})
-//
-//		It("calculates if subset of total examples", func() {
-//			expected := float64(0.7245112497836532)
-//			Expect(entropy(float64(10.0), node)).To(Equal(expected))
-//		})
-//	})
+	Describe("entropy", func() {
+
+		var (
+			examples [][]float64
+		)
+
+		BeforeEach(func() {
+			examples = [][]float64{{1.0, 1.0}, {2.0, 1.0}, {3.0, 0.0}}
+
+		})
+
+        It("returns zero if no examples", func() {
+            Expect(entropy([][]float64{})).To(Equal(0.0))
+        })
+
+        It("returns zero if no data for example", func() {
+            Expect(entropy([][]float64{[]float64{}})).To(Equal(0.0))
+        })
+
+		It("calculates information from passed in examples", func() {
+			expected := float64(0.9182958340544896)
+			Expect(entropy(examples)).To(Equal(expected))
+		})
+	})
 
 	Describe("LoadExamples", func() {
 
