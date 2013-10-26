@@ -7,23 +7,6 @@ import (
 
 var _ = Describe("Dtl", func() {
 
-	Describe("information", func() {
-
-		It("returns zero if x and y are 1.0", func() {
-			Expect(information(1.0, 1.0)).To(Equal(0.0))
-		})
-
-		It("returns close to zero if x and y are 0.0", func() {
-			var expected float64 = 4.650699332842307e-06
-			Expect(information(0.0, 0.0)).To(Equal(expected))
-		})
-
-		It("returns expected calculation", func() {
-			var expected float64 = 0.9643856189774724
-			Expect(information(0.5, 0.2)).To(Equal(expected))
-		})
-	})
-
     Describe("split", func(){
     
         It("returns no examples if none left", func(){
