@@ -45,31 +45,50 @@ var _ = Describe("Dtl", func() {
 		})
 	})
 
-	Describe("entropy", func() {
+    Describe("split", func(){
+    
+        It("returns no examples if none left", func(){
+            examples := [][]float64{}
+            Expect(split(examples, 1, 1.0)).To(HaveLen(0))
+        })
 
-		var (
-			examples [][]float64
-			children []Node
-			node     Node
-		)
+        It("returns no examples if not found for value", func(){
+            examples := [][]float64{[]float64{3.0, 4.0, 5.0, 1.0}, []float64{9.0, 8.0, 7.0, 0.0}}
+            Expect(split(examples, 1, 6.0)).To(HaveLen(0))
+        })
 
-		BeforeEach(func() {
-			examples = [][]float64{{1.0, 1.0}, {2.0, 1.0}, {3.0, 0.0}}
-			children = []Node{{name: "test2", examples: examples}}
-			node = Node{name: "test", examples: examples, children: children}
+        It("returns examples split on value", func(){
+            examples := [][]float64{[]float64{3.0, 4.0, 5.0, 1.0}, []float64{9.0, 8.0, 7.0, 0.0}}
+            expected := [][]float64{[]float64{4.0, 5.0, 1.0}}
+            Expect(split(examples, 0, 3.0)).To(Equal(expected))
+        })
+    })
 
-		})
-
-		It("calculates if remaining examples", func() {
-			expected := float64(0.08170416594551044)
-			Expect(entropy(float64(3.0), node)).To(Equal(expected))
-		})
-
-		It("calculates if subset of total examples", func() {
-			expected := float64(0.7245112497836532)
-			Expect(entropy(float64(10.0), node)).To(Equal(expected))
-		})
-	})
+//	Describe("entropy", func() {
+//
+//		var (
+//			examples [][]float64
+//			children []Node
+//			node     Node
+//		)
+//
+//		BeforeEach(func() {
+//			examples = [][]float64{{1.0, 1.0}, {2.0, 1.0}, {3.0, 0.0}}
+//			children = []Node{{name: "test2", examples: examples}}
+//			node = Node{name: "test", examples: examples, children: children}
+//
+//		})
+//
+//		It("calculates if remaining examples", func() {
+//			expected := float64(0.08170416594551044)
+//			Expect(entropy(float64(3.0), node)).To(Equal(expected))
+//		})
+//
+//		It("calculates if subset of total examples", func() {
+//			expected := float64(0.7245112497836532)
+//			Expect(entropy(float64(10.0), node)).To(Equal(expected))
+//		})
+//	})
 
 	Describe("LoadExamples", func() {
 

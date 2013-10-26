@@ -63,17 +63,17 @@ func gain(total float64, examples [][]float64) float64 {
 	return factor * information(x, y)
 }
 
-func entropy(totalExamples float64, node Node) float64 {
-	var gains []float64
-	for _, child := range node.children {
-		gains = append(gains, gain(totalExamples, child.examples))
-	}
-	sum := float64(0.0)
-	for _, val := range gains {
-		sum += val
-	}
-	return float64(1.0 - sum)
-}
+//func entropy(examples[][]float64) float64 {
+//	var gains []float64
+//	for _, child := range node.children {
+//		gains = append(gains, gain(totalExamples, child.examples))
+//	}
+//	sum := float64(0.0)
+//	for _, val := range gains {
+//		sum += val
+//	}
+//	return float64(1.0 - sum)
+//}
 
 func LoadExamples(filepath string) ([][]float64, []string) {
 	file, _ := os.Open(filepath)
@@ -127,3 +127,24 @@ func (dt *DT) Majority() (result bool) {
 	}
 	return
 }
+
+func split(examples [][]float64, label int, value float64) (newExamples [][]float64) {
+    for _, ex := range examples {
+        if ex[label] == value {
+            remaining := ex[:label]
+            remaining = append(remaining, ex[label+1:]...)
+            newExamples = append(newExamples, remaining)    
+        }
+    }
+    return
+}
+
+//func (dt *DT) BestFeature() (featidx int) {
+//    max := -1.0
+//    total := len(dt.Examples)
+//    var info float64
+//    for _, label := range dt.Labels {
+//        
+//    }
+//    return
+//}
