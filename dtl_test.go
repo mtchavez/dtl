@@ -87,4 +87,25 @@ var _ = Describe("Dtl", func() {
 		})
 	})
 
+    Describe("bestFeature", func(){
+    
+        It("returns -1 if no examples", func(){
+            Expect(bestFeature([][]float64{})).To(Equal(-1))   
+        })
+
+        It("returns -1 if no features", func(){
+            Expect(bestFeature([][]float64{[]float64{}})).To(Equal(-1))   
+        })
+
+        It("returns index of next best feature", func(){
+            examples := [][]float64{
+                []float64{0.1, 0.4, 0.2, 1.0},
+                []float64{0.0, 0.3, 1.1, 0.0},
+                []float64{1.1, 0.4, 3.2, 1.0},
+                []float64{1.1, 0.4, 3.2, 1.0},
+            }
+            Expect(bestFeature(examples)).To(Equal(0))
+        })
+    })
+
 })

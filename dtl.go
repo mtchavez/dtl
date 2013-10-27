@@ -114,7 +114,8 @@ func (dt *DT) Majority() (result bool) {
 func split(examples [][]float64, label int, value float64) (newExamples [][]float64) {
     for _, ex := range examples {
         if ex[label] == value {
-            remaining := ex[:label]
+            remaining := make([]float64, len(ex[:label]))
+            copy(remaining, ex[:label])
             remaining = append(remaining, ex[label+1:]...)
             newExamples = append(newExamples, remaining)    
         }
@@ -122,12 +123,31 @@ func split(examples [][]float64, label int, value float64) (newExamples [][]floa
     return
 }
 
-//func (dt *DT) BestFeature() (featidx int) {
-//    max := -1.0
-//    total := len(dt.Examples)
-//    var info float64
-//    for _, label := range dt.Labels {
-//        
-//    }
-//    return
-//}
+func bestFeature(examples [][]float64) (best int) {
+    var info float64 = 0.0
+    tot := float64(len(examples))
+    best = -1
+    if tot == 0 {
+        return
+    }
+    total := len(examples[0])
+    baseEnt := entropy(examples)
+    for i := 0; i < total; i++ {
+        features := []float64{}
+        for _, ex := range examples {
+            features = append(features, ex[i])
+        }
+        var newEnt float64 = 0.0
+        for _, val := range features {
+            data := split(examples, i, val)
+            prob := float64(len(data)) / tot
+            newEnt += prob * entropy(data)
+        }
+        infoGain := baseEnt - newEnt
+        if infoGain > info {
+            info = infoGain
+            best = i
+        }
+    }
+    return
+}
