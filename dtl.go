@@ -11,7 +11,7 @@ import (
 type DT struct {
 	Labels   []string
 	Examples [][]float64
-	Default  bool
+	Default  float64
 	T        *Tree
 }
 
@@ -87,27 +87,35 @@ func LoadExamples(filepath string) ([][]float64, []string) {
 	return examples, labels
 }
 
-func (dt *DT) Majority() (result bool) {
-	total := len(dt.Examples)
+func (dt *DT) Majority(examples [][]float64) (result float64, majorityCount float64) {
+    labelCounts := make(map[float64]float64)
+	total := len(examples)
 	if total == 0 {
-		return dt.Default
+        result = dt.Default
+		return
 	}
-	good := 0
-	bad := 0
-	for _, ex := range dt.Examples {
-		if ex[len(ex)-1] == 1.0 {
-			good++
-		} else {
-			bad++
-		}
+	length := 0
+	if len(examples) > 0 {
+		length = len(examples[0])
 	}
-	if good > (total / 2) {
-		result = true
-	} else if bad > (total / 2) {
-		result = false
-	} else {
+	if length <= 0 {
 		result = dt.Default
+		return
 	}
+	for _, ex := range examples {
+        label := ex[length-1]
+        count, exists := labelCounts[label]
+        if !exists {
+            labelCounts[label] = 0
+        }
+        labelCounts[label] = count + 1
+	}
+    for label, count := range labelCounts {
+        if count > majorityCount {
+            majorityCount = count
+            result = label
+        }
+    }
 	return
 }
 

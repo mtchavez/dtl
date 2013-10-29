@@ -68,22 +68,27 @@ var _ = Describe("Dtl", func() {
 		)
 
 		BeforeEach(func() {
-			dt = &DT{Default: true}
+			dt = &DT{Default: 1.0}
 			examples = [][]float64{{0.0, 1.0}, {0.0, 0.0}, {0.0, 0.0}}
 		})
 
 		It("returns defualt if no examples", func() {
-			Expect(dt.Majority()).To(Equal(dt.Default))
+            result, count := dt.Majority([][]float64{})
+			Expect(result).To(Equal(dt.Default))
+            Expect(count).To(Equal(0.0))
 		})
 
 		It("returns clear majority", func() {
-			dt.Examples = examples
-			Expect(dt.Majority()).To(BeFalse())
+            result, count := dt.Majority(examples)
+			Expect(result).To(Equal(0.0))
+            Expect(count).To(Equal(2.0))
 		})
 
 		It("returns default if results are even", func() {
-			dt.Examples = append(examples, []float64{1.0, 1.0})
-			Expect(dt.Majority()).To(Equal(dt.Default))
+			examples = append(examples, []float64{1.0, 1.0})
+            result, count := dt.Majority(examples)
+			Expect(result).To(Equal(dt.Default))
+            Expect(count).To(Equal(2.0))
 		})
 	})
 
